@@ -1,0 +1,26 @@
+go.property('max_count', 20)
+go.property('cooldown', 0.3)
+go.property('scatter', 150)
+
+local scale1 = vmath.vector3(2, 2, 1)
+
+function init(self)
+	self.time_left = 0
+	self.count = 0
+end
+
+local function spawn(self)
+	local pos = go.get_position() + vmath.vector3(math.random(-self.scatter, self.scatter), math.random(-self.scatter, self.scatter), 0)
+	factory.create("#factory", pos)
+	self.time_left = 0
+	self.count = self.count + 1
+end
+
+function update(self, dt)
+	if self.count < self.max_count then
+		self.time_left = self.time_left + dt
+		if self.time_left> self.cooldown then
+			spawn(self)
+		end
+	end
+end

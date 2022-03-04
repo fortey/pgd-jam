@@ -73,11 +73,11 @@ instances {
   }
 }
 instances {
-  id: "spider"
-  prototype: "/main/spider.go"
+  id: "spawner"
+  prototype: "/main/spawner.go"
   position {
-    x: 383.0
-    y: -49.0
+    x: 581.0
+    y: -62.0
     z: 0.0
   }
   rotation {

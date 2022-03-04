@@ -12,7 +12,7 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 	self.dir = vmath.vector3()
 	self.speed = vmath.vector3()
-
+	self.is_moving = false
 end
 
 function on_input(self, action_id, action)
@@ -35,6 +35,16 @@ function update(self, dt)
 		self.dir = vmath.normalize(self.dir)
 	end
 
+	if not self.is_moving and vmath.length(self.dir) > 0 then
+		msg.post("#sprite_moving", "play_animation", {id = hash("char_moving")})
+		self.is_moving = true
+	end
+
+	if vmath.length(self.dir) == 0 then
+		msg.post("#sprite_moving", "play_animation", {id = hash("char_moving1")})
+		self.is_moving = false
+	end
+	
 	local pos = go.get_position()
 	pos = pos + self.dir * SPEED * dt
 	self.dir = vmath.vector3()
