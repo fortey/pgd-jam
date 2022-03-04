@@ -1,4 +1,5 @@
 function init(self)
+	math.randomseed(os.time())
 	msg.post(".", "acquire_input_focus")
 	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
 
