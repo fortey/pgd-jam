@@ -1,0 +1,46 @@
+
+
+--local camera = require "orthographic.camera"
+
+local SPEED = 400
+
+--local CAMERA_ID = hash("/camera")
+
+function init(self)
+
+	--self.direction = go.get_rotation()
+	msg.post(".", "acquire_input_focus")
+	self.dir = vmath.vector3()
+	self.speed = vmath.vector3()
+
+end
+
+function on_input(self, action_id, action)
+	if action_id then
+		if action_id == hash("up") then
+			self.dir.y = 1
+		elseif action_id == hash("down") then
+			self.dir.y = -1
+		elseif action_id == hash("left") then
+			self.dir.x = -1
+		elseif action_id == hash("right") then
+			self.dir.x = 1	
+		end
+	end
+end
+
+function update(self, dt)
+	
+	if vmath.length_sqr(self.dir) > 1 then
+		self.dir = vmath.normalize(self.dir)
+	end
+
+	local pos = go.get_position()
+	pos = pos + self.dir * SPEED * dt
+	self.dir = vmath.vector3()
+
+	--pos.x = utils.clamp(pos.x, 0, width)
+	--pos.y = utils.clamp(pos.y, 0, height)
+	go.set_position(pos)
+
+end

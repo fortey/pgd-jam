@@ -1,0 +1,30 @@
+go.property('speed', 1200)
+go.property('lifetime', 2)
+
+function init(self)
+	self.rot = go.get_rotation()
+	self.velocity = vmath.rotate(self.rot, vmath.vector3(0, self.speed, 0))
+	self.time = 0
+end
+
+function update(self, dt)
+	self.time = self.time + dt
+	if self.time> self.lifetime then
+		go.delete()
+	end
+	
+	local pos = go.get_position()
+	pos = pos + self.velocity * dt
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		--msg.post("#sprite", "play_animation", {id = hash("hit")})
+		--msg.post(message.other_id, "hit")
+		self.velocity = vmath.vector3(0, 0, 0)
+		go.delete()
+	elseif message_id == hash("animation_done") then	
+		go.delete()
+	end
+end
