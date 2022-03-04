@@ -21,7 +21,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") then
 		--msg.post("#sprite", "play_animation", {id = hash("hit")})
-		--msg.post(message.other_id, "hit")
+		msg.post(message.other_id, "hit")
 		self.velocity = vmath.vector3(0, 0, 0)
 		go.delete()
 	elseif message_id == hash("animation_done") then	

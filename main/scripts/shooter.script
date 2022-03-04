@@ -3,11 +3,14 @@ go.property("spread_angle", 0.2)
 
 local camera = require "orthographic.camera"
 local CAMERA_ID = hash("/camera")
+local weapons = require "main.scripts.weapons"
+local CHANGE_WEAPON_ID = hash("change_weapon")
 
 function init(self)
 
 	math.randomseed(os.time())
-
+	self.weapon = weapons["gun"]
+	msg.post("#sprite", "play_animation", {id = hash("char_gun")})
 end
 
 function shotgun_shoot(self)
@@ -39,7 +42,7 @@ function on_input(self, action_id, action)
 	if action_id then		
 		-- shoot and apply recoil
 		if self.crosshair and action_id == hash("touch") and action.released then
-			shotgun_shoot(self)
+			self.weapon.shoot(self, go)
 		end
 	end
 end
@@ -53,5 +56,15 @@ function update(self, dt)
 		local rotation = vmath.quat_rotation_z(angle)
 		go.set_rotation(rotation)
 	end
+end
 
+function change_weapon(self, weapon)
+	self.weapon = weapons[weapon]
+	msg.post("#sprite", "play_animation", {id = self.weapon.sprite})
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == CHANGE_WEAPON_ID then
+		change_weapon(self, message.weapon)
+	end
 end
