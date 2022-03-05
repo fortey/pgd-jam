@@ -5,6 +5,7 @@ local CAMERA_ID = hash("/camera")
 
 M["gun"] = {
 	sprite = hash("char_gun"),
+	fire_anim = hash("char_gun_fire"),
 	shoot = function(self, go)
 		local crosshair_world = go.get_position("crosshair")
 		local player_world = go.get_position()
@@ -14,12 +15,13 @@ M["gun"] = {
 		factory.create("#shoot_factory", go.get_position() + offset)
 
 		sound.play("#shoot")
-		camera.recoil(CAMERA_ID, offset, 0.2)
+		camera.recoil(CAMERA_ID, offset, 0.03)
 	end
 }
 
 M["shotgun"] = {
-	sprite = hash("char"),
+	sprite = hash("char_shotgun"),
+	fire_anim = hash("char_shotgun_fire"),
 	shoot = function(self, go)
 		local crosshair_world = go.get_position("crosshair")
 		local player_world = go.get_position()
@@ -34,7 +36,7 @@ M["shotgun"] = {
 		end
 
 		sound.play("#shoot")
-		camera.recoil(CAMERA_ID, offset, 0.4)
+		camera.recoil(CAMERA_ID, offset, 0.08)
 	end
 }
 return M

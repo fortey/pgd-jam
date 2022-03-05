@@ -96,7 +96,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "main/char"
+  texture: "main/char_shotgun"
   id: "shotgun"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE

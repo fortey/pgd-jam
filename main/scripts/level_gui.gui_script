@@ -10,7 +10,7 @@ function init(self)
 		msg.post("/player", "change_weapon", {weapon = "gun"})
 	end)
 
-	self.shotgun = create_blue_button(gui.get_node("shotgun"), hash("char"), function()
+	self.shotgun = create_blue_button(gui.get_node("shotgun"), hash("char_shotgun"), function()
 		msg.post("/player", "change_weapon", {weapon = "shotgun"})
 	end)
 end

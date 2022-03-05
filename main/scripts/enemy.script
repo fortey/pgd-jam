@@ -5,31 +5,36 @@ local HIT_ID = hash("hit")
 
 function init(self)
 	self.target_id = nil
+	self.is_alive = true
 	--self.target_position = random_position_on_wall()
 end
 
 function update(self, dt)
-	local pos = go.get_world_position()
-	self.target_position = go.get_world_position('player')
-	local target_angle = -math.atan2(self.target_position.x - pos.x, self.target_position.y - pos.y)
-	local target_quat = vmath.quat_rotation_z(target_angle)
-	local current_quat = go.get_rotation()
+	if self.is_alive then
+		local pos = go.get_world_position()
+		self.target_position = go.get_world_position('player')
+		local target_angle = -math.atan2(self.target_position.x - pos.x, self.target_position.y - pos.y)
+		local target_quat = vmath.quat_rotation_z(target_angle)
+		local current_quat = go.get_rotation()
 
-	-- rotate towards target
-	local q = vmath.slerp(0.08, current_quat, target_quat)
-	go.set_rotation(q)
+		-- rotate towards target
+		local q = vmath.slerp(0.08, current_quat, target_quat)
+		go.set_rotation(q)
 
-	-- move towards target
-	local d = vmath.rotate(q, vmath.vector3(0, 1, 0))
-	go.set_position(pos + d * self.speed * dt)
-
+		-- move towards target
+		local d = vmath.rotate(q, vmath.vector3(0, 1, 0))
+		go.set_position(pos + d * self.speed * dt)
+	end
 end
 
 function on_message(self, message_id, message)
-	if message_id == HIT_ID then
+	if message_id == HIT_ID and self.is_alive then
 		self.hp = self.hp - 5
 		if self.hp<=0 then
-			go.delete()
+			msg.post('#sprite', 'play_animation', {id = hash('spider_dead')})
+			msg.post('#collisionobject', 'disable')
+			self.is_alive = false
+			--go.delete()
 		end
 	end
 end

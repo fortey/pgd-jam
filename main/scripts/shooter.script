@@ -6,19 +6,22 @@ local CAMERA_ID = hash("/camera")
 local weapons = require "main.scripts.weapons"
 local CHANGE_WEAPON_ID = hash("change_weapon")
 
-function init(self)
-	self.weapon = weapons["gun"]
-	msg.post("#sprite", "play_animation", {id = hash("char_gun")})
+local function change_weapon(self, weapon)
+	self.weapon = weapons[weapon]
+	self.fire_anim = self.weapon.fire_anim
+	msg.post("#sprite", "play_animation", {id = self.weapon.sprite})
 end
 
-
-
+function init(self)
+	change_weapon(self, "gun")
+end
 
 function on_input(self, action_id, action)
 	if action_id then		
 		-- shoot and apply recoil
 		if self.crosshair and action_id == hash("touch") and action.released then
 			self.weapon.shoot(self, go)
+			msg.post("#sprite", "play_animation", {id = self.fire_anim})
 		end
 	end
 end
@@ -32,11 +35,6 @@ function update(self, dt)
 		local rotation = vmath.quat_rotation_z(angle)
 		go.set_rotation(rotation)
 	end
-end
-
-local function change_weapon(self, weapon)
-	self.weapon = weapons[weapon]
-	msg.post("#sprite", "play_animation", {id = self.weapon.sprite})
 end
 
 function on_message(self, message_id, message, sender)
