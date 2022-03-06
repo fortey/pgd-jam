@@ -10,6 +10,7 @@ local function change_weapon(self, weapon)
 	self.weapon = weapons[weapon]
 	self.fire_anim = self.weapon.fire_anim
 	self.attack_cooldown = self.weapon.time_between_atack
+	self.reload_cooldown = 0
 	msg.post("#sprite", "play_animation", {id = self.weapon.sprite})
 end
 
@@ -17,29 +18,50 @@ function init(self)
 	change_weapon(self, "gun")
 end
 
+local function shoot(self)
+	self.weapon.shoot(self, go)
+	msg.post("#sprite", "play_animation", {id = self.fire_anim})
+	self.attack_cooldown = self.weapon.time_between_atack
+end
+
+local function reload(self)
+
+end
+
 function on_input(self, action_id, action)
 	if action_id then		
 		-- shoot and apply recoil
 		if self.crosshair and action_id == hash("touch") and action.released and self.attack_cooldown <= 0 then
-			self.weapon.shoot(self, go)
-			msg.post("#sprite", "play_animation", {id = self.fire_anim})
-			self.attack_cooldown = self.weapon.time_between_atack
+			if self.weapon.catridges > 0 then
+				shoot(self)
+				if self.weapon.catridges > 0 then
+					msg.post("/gui#level", "show_reload")
+				else
+					reload(self)
+				end
+			else
+--play sound
+			end
 		end
 	end
 end
 
 function update(self, dt)
-	msg.post("/gui#level", "update_reload", { position = crosshair_world})
+	
 	if self.crosshair then
 		local crosshair_world = go.get_world_position("crosshair")
 		local player_world = go.get_world_position()
 		local angle = math.atan2(player_world.x - crosshair_world.x, crosshair_world.y - player_world.y)
 		local rotation = vmath.quat_rotation_z(angle)
 		go.set_rotation(rotation)
-
+		
 		if self.attack_cooldown > 0 then
 			self.attack_cooldown = self.attack_cooldown - dt
-			msg.post("/gui#level", "update_reload", { position = crosshair_world})
+			if self.attack_cooldown > 0 then --self.update_reload({ cooldown = self.attack_cooldown, all_time = self.weapon.time_between_atack}, crosshair_world)
+				msg.post("/gui#level", "update_reload", { position = crosshair_world, cooldown = self.attack_cooldown, all_time = self.weapon.time_between_atack})
+			else
+				msg.post("/gui#level", "hide_reload")
+			end
 		end
 	end
 end
@@ -47,5 +69,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == CHANGE_WEAPON_ID then
 		change_weapon(self, message.weapon)
+	elseif message_id == hash("set_update_reload") then
+		self.update_reload = message.callback
 	end
 end
