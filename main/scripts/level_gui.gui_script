@@ -1,4 +1,8 @@
 local button = require "main.scripts.button"
+local camera = require "orthographic.camera"
+
+local UPDATE_HP = hash("update_hp")
+local UPDATE_RELOAD = hash("update_reload")
 
 local function create_blue_button(node, spite, callback)
 	return button.create(node, spite, spite, callback)
@@ -22,5 +26,21 @@ function on_input(self, action_id, action)
 
 	if self.shotgun.on_input(action_id, action) then
 		return true
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == UPDATE_HP then 
+		local node = gui.get_node("hp")
+		local y = message.hp/message.max_hp * 30 - 30
+		gui.set_position(node, vmath.vector3(0,y,0))
+		--local ofset = vmath.vector3(-50,0,0)
+		--if message.position then gui.set_position(node, camera.world_to_screen(nil, message.position, nil)+ofset) end
+	elseif message_id == UPDATE_RELOAD then 
+		local node = gui.get_node("reload")
+		
+		if message.position then
+			gui.set_position(node, camera.world_to_screen(nil, message.position, nil)) 
+		end
 	end
 end

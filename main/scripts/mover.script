@@ -52,5 +52,5 @@ function update(self, dt)
 	--pos.x = utils.clamp(pos.x, 0, width)
 	--pos.y = utils.clamp(pos.y, 0, height)
 	go.set_position(pos)
-
+	
 end

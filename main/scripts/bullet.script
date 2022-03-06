@@ -1,6 +1,8 @@
 go.property('speed', 1200)
 go.property('lifetime', 2)
 
+local TRIGGER_RESPONSE = hash("trigger_response")
+
 function init(self)
 	self.rot = go.get_rotation()
 	self.velocity = vmath.rotate(self.rot, vmath.vector3(0, self.speed, 0))
@@ -19,7 +21,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("trigger_response") then
+	if message_id == TRIGGER_RESPONSE then
 		--msg.post("#sprite", "play_animation", {id = hash("hit")})
 		msg.post(message.other_id, "hit")
 		self.velocity = vmath.vector3(0, 0, 0)

@@ -1,11 +1,15 @@
 go.property("hp", 10)
 go.property("speed", 100)
+go.property("time_between_atack", 1)
 
 local HIT_ID = hash("hit")
+local COLLISION_RESPONSE = hash("collision_response")
+local PLAYER = hash("player")
 
 function init(self)
 	self.target_id = nil
 	self.is_alive = true
+	self.attack_cooldown = 0
 	--self.target_position = random_position_on_wall()
 end
 
@@ -24,6 +28,10 @@ function update(self, dt)
 		-- move towards target
 		local d = vmath.rotate(q, vmath.vector3(0, 1, 0))
 		go.set_position(pos + d * self.speed * dt)
+
+		if self.attack_cooldown > 0 then
+			self.attack_cooldown = self.attack_cooldown - dt
+		end
 	end
 end
 
@@ -35,6 +43,11 @@ function on_message(self, message_id, message)
 			msg.post('#collisionobject', 'disable')
 			self.is_alive = false
 			--go.delete()
+		end
+	elseif message_id == COLLISION_RESPONSE and message.other_group == PLAYER then
+		if self.attack_cooldown <= 0 then	
+			msg.post(message.other_id, 'hit', {damage = 5})
+			self.attack_cooldown = self.time_between_atack
 		end
 	end
 end

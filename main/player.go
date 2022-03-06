@@ -28,6 +28,21 @@ components {
     w: 1.0
   }
 }
+components {
+  id: "player"
+  component: "/main/scripts/player.script"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
@@ -76,7 +91,7 @@ embedded_components {
   "    index: 0\n"
   "    count: 1\n"
   "  }\n"
-  "  data: 14.53\n"
+  "  data: 10.3485\n"
   "}\n"
   "linear_damping: 0.0\n"
   "angular_damping: 0.0\n"

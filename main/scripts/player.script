@@ -1,0 +1,16 @@
+go.property('max_hp', 100)
+
+local HIT = hash('hit')
+
+function init(self)
+	self.hp = self.max_hp
+end
+
+
+
+function on_message(self, message_id, message, sender)
+	if message_id == HIT and self.hp>0 then	
+		self.hp = self.hp - message.damage
+		msg.post("/gui#level", "update_hp", { hp = self.hp, max_hp = self.max_hp})
+	end
+end
