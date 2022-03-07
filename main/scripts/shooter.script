@@ -14,8 +14,15 @@ local function change_weapon(self, weapon)
 	msg.post("#sprite", "play_animation", {id = self.weapon.sprite})
 end
 
+local function update_weapon_info(weapon)
+	msg.post("/gui#level", "update_ammo",
+	{name = weapon.name, catridges = weapon.catridges, clip_capacity = weapon.clip_capacity, ammunition = weapon.ammunition})
+end
+
 function init(self)
 	change_weapon(self, "gun")
+	update_weapon_info(weapons["gun"])
+	update_weapon_info(weapons["shotgun"])
 end
 
 local function shoot(self)
@@ -23,7 +30,7 @@ local function shoot(self)
 	msg.post("#sprite", "play_animation", {id = self.fire_anim})
 	self.attack_cooldown = self.weapon.time_between_atack
 	self.weapon.catridges = self.weapon.catridges - 1
-	msg.post("/gui#level", "update_ammo", {name = self.weapon.name, catridges = self.weapon.catridges, clip_capacity = self.weapon.clip_capacity})
+	update_weapon_info(self.weapon)
 end
 
 local function start_reload(self)
@@ -39,6 +46,7 @@ local function reload(self, weapon)
 	weapon.ammunition = weapon.ammunition - amount
 	msg.post("/gui#level", "hide_reload")
 	self.attack_cooldown = 0
+	update_weapon_info(self.weapon)
 end
 
 function on_input(self, action_id, action)
@@ -48,13 +56,17 @@ function on_input(self, action_id, action)
 			if self.weapon.catridges > 0 then
 				shoot(self)
 				if self.weapon.catridges > 0 then
-					msg.post("/gui#level", "show_reload")
+					if self.weapon.show_reload_between_attack then
+						msg.post("/gui#level", "show_reload")
+					end
 				else
 					start_reload(self)
 				end
 			else
---play sound
+				--play sound
 			end
+		elseif action_id == hash("reload") and action.released  and self.reload_cooldown <= 0 then
+			start_reload(self)
 		end
 	end
 end

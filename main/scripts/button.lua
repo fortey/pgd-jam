@@ -15,7 +15,7 @@ function M.create(node, pressed_animation, released_animation, callback)
 	gui.play_flipbook(node, released_animation)
 
 	-- define the input handler function
-	function button.on_input(action_id, action)
+	function button.on_input(action_id, action, is_hotkey)
 		-- mouse/finger over the button?
 		local over = gui.pick_node(node, action.x, action.y)
 		-- over button and mouse/finger pressed?
@@ -23,11 +23,11 @@ function M.create(node, pressed_animation, released_animation, callback)
 			button.pressed = true
 			gui.play_flipbook(node, pressed_animation)
 		-- mouse/finger released and button pressed?
-		elseif action.released and button.pressed then
+		elseif action.released and button.pressed or is_hotkey then
 			button.pressed = false
 			gui.play_flipbook(node, released_animation)
 			-- only treat this as a click if finger/mouse is over button when releasing
-			if over then
+			if over or is_hotkey then
 				callback(button)
 				return true
 			end

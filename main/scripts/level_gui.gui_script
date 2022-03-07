@@ -6,6 +6,8 @@ local UPDATE_RELOAD = hash("update_reload")
 local SHOW_RELOAD = hash("show_reload")
 local HIDE_RELOAD = hash("hide_reload")
 local UPDATE_AMMO = hash("update_ammo")
+local KEY_1 = hash("1")
+local KEY_2 = hash("2")
 
 local function create_blue_button(node, spite, callback)
 	return button.create(node, spite, spite, callback)
@@ -33,6 +35,13 @@ function on_input(self, action_id, action)
 	if self.shotgun.on_input(action_id, action) then
 		return true
 	end
+
+	if action_id == KEY_1 and action.released then
+		self.gun.on_input(action_id, action, true)
+	end
+	if action_id == KEY_2 and action.released then
+		self.shotgun.on_input(action_id, action, true)
+	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -54,5 +63,6 @@ function on_message(self, message_id, message, sender)
 		local y = message.catridges/message.clip_capacity * 30 - 30
 		gui.set_position(gui.get_node(message.name.."_progress"), vmath.vector3(0,y,0))
 		gui.set_text(gui.get_node(message.name.."_catridges"), message.catridges.."/"..message.clip_capacity)
+		gui.set_text(gui.get_node(message.name.."_ammunition"), message.ammunition)
 	end
 end
