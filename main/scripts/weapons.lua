@@ -4,6 +4,7 @@ local camera = require "orthographic.camera"
 local CAMERA_ID = hash("/camera")
 
 M["gun"] = {
+	name = "gun",
 	sprite = hash("char_gun"),
 	fire_anim = hash("char_gun_fire"),
 	time_between_atack = 0.1,
@@ -25,6 +26,7 @@ M["gun"] = {
 }
 
 M["shotgun"] = {
+	name = "shotgun",
 	sprite = hash("char_shotgun"),
 	fire_anim = hash("char_shotgun_fire"),
 	time_between_atack = 0.5,

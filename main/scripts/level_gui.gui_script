@@ -5,19 +5,10 @@ local UPDATE_HP = hash("update_hp")
 local UPDATE_RELOAD = hash("update_reload")
 local SHOW_RELOAD = hash("show_reload")
 local HIDE_RELOAD = hash("hide_reload")
+local UPDATE_AMMO = hash("update_ammo")
 
 local function create_blue_button(node, spite, callback)
 	return button.create(node, spite, spite, callback)
-end
-
-local function update_reload(message, position)
-	local ofset = vmath.vector3(25,25,0)
-	if position then
-		gui.set_position(gui.get_node("reload"), camera.world_to_screen(nil, position, nil)+ofset)
-		print(position)
-		local value = (message.all_time - message.cooldown)/message.all_time*360
-		gui.set_fill_angle(self.reload_node, value)
-	end
 end
 
 function init(self)
@@ -32,8 +23,6 @@ function init(self)
 
 	self.hp_node = gui.get_node("hp")
 	self.reload_node = gui.get_node("reload")
-
-	--msg.post("/player", "set_update_reload", {callback = update_reload})
 end
 
 function on_input(self, action_id, action)
@@ -48,13 +37,9 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == UPDATE_HP then 
-		--local node = gui.get_node("hp")
 		local y = message.hp/message.max_hp * 30 - 30
 		gui.set_position(self.hp_node, vmath.vector3(0,y,0))
-		--local ofset = vmath.vector3(-50,0,0)
-		--if message.position then gui.set_position(node, camera.world_to_screen(nil, message.position, nil)+ofset) end
 	elseif message_id == UPDATE_RELOAD then 
-		--local node = gui.get_node("reload")
 		local ofset = vmath.vector3(25,25,0)
 		if message.position then
 			gui.set_position(self.reload_node, camera.world_to_screen(nil, message.position, nil)+ofset)
@@ -65,5 +50,9 @@ function on_message(self, message_id, message, sender)
 		gui.set_alpha(self.reload_node, 1)
 	elseif message_id == HIDE_RELOAD then
 		gui.set_alpha(self.reload_node, 0)
+	elseif message_id == UPDATE_AMMO then 
+		local y = message.catridges/message.clip_capacity * 30 - 30
+		gui.set_position(gui.get_node(message.name.."_progress"), vmath.vector3(0,y,0))
+		gui.set_text(gui.get_node(message.name.."_catridges"), message.catridges.."/"..message.clip_capacity)
 	end
 end
