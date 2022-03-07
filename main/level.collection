@@ -3,8 +3,8 @@ instances {
   id: "player"
   prototype: "/main/player.go"
   position {
-    x: 126.0
-    y: -33.0
+    x: 1076.0
+    y: 332.0
     z: 0.1
   }
   rotation {
@@ -91,8 +91,36 @@ instances {
   id: "spawner"
   prototype: "/main/spawner.go"
   position {
-    x: 581.0
-    y: -62.0
+    x: 2014.0
+    y: 1010.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  component_properties {
+    id: "spawner"
+    properties {
+      id: "max_count"
+      value: "0.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
+  scale3 {
+    x: 2.0
+    y: 2.0
+    z: 1.0
+  }
+}
+instances {
+  id: "spider"
+  prototype: "/main/spider.go"
+  position {
+    x: 666.0
+    y: 316.0
     z: 0.0
   }
   rotation {
@@ -102,14 +130,14 @@ instances {
     w: 1.0
   }
   scale3 {
-    x: 2.0
-    y: 2.0
+    x: 1.0
+    y: 1.0
     z: 1.0
   }
 }
 scale_along_z: 0
 embedded_instances {
-  id: "bg"
+  id: "tilemap"
   data: "components {\n"
   "  id: \"level1\"\n"
   "  component: \"/assets/level1.tilemap\"\n"
@@ -176,6 +204,41 @@ embedded_instances {
   data: "components {\n"
   "  id: \"level\"\n"
   "  component: \"/main/gui/level.gui\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "scripts"
+  data: "components {\n"
+  "  id: \"level\"\n"
+  "  component: \"/main/scripts/level.script\"\n"
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"

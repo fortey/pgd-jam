@@ -1,0 +1,98 @@
+go.property("tile_x", 0)
+go.property("tile_y", 0)
+go.property("type",1)
+
+local s = require("main/scripts/settings")
+
+local start_id = 1
+local get_path
+
+local function reset(self)
+    self.is_moving = false
+    self.target_id = start_id
+    self.path_size = 0
+    self.path = {}
+    self.target_position = vmath.vector3()
+    self.current_position = go.get_position(".")
+    local coord_x, coord_y = utils:screen_to_coords(self.current_position.x, self.current_position.y)
+    self.tile_x = coord_x
+    self.tile_y = coord_y
+end
+
+
+
+local function move(self)
+    if self.target_id < self.path_size then
+        self.target_id = self.target_id + 1
+    else
+        -- End of the path
+        self.tile_x = self.path[self.target_id].x
+        self.tile_y = self.path[self.target_id].y
+
+        reset(self)
+
+        timer.delay(0.4, false, get_path) -- restart
+        return
+    end
+
+    for i = 1, s.tiles_count do
+        if self.path[self.target_id].x == s.tiles[i].x and self.path[self.target_id].y == s.tiles[i].y then
+            self.current_position = self.target_position
+            self.target_position = s.tiles[i].position
+            --self.normal = vmath.normalize(self.target_position - self.current_position)
+
+            go.animate(
+                ".",
+                "position",
+                go.PLAYBACK_ONCE_FORWARD,
+                self.target_position,
+                go.EASING_LINEAR,
+                0.5,
+                0,
+                get_path
+            )
+        end
+    end
+end
+
+
+get_path = function(self, near_tile)
+    --near_tile = near_tile or false
+
+    --if near_tile == false then
+    --self.target = s.targets[rnd.range(1, s.target_count)]
+    --end
+    local target_pos = go.get_world_position('player')
+    local coord_x, coord_y = utils:screen_to_coords(target_pos.x, target_pos.y)
+    self.target = {x = coord_x, y = coord_y}
+    self.result, self.path_size, self.totalcost, self.path =
+    astar.solve(self.tile_x, self.tile_y, self.target.x, self.target.y)
+
+    if self.result == astar.SOLVED then
+        --if self.type == 1 then
+
+        --end
+
+        move(self)
+    elseif self.result == astar.NO_SOLUTION then
+        print("NO_SOLUTION")
+
+
+    elseif self.result == astar.START_END_SAME then
+        --get_path(self)
+    end
+end
+
+
+function init(self)
+    reset(self)
+
+        get_path(self)
+
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash("update_costs") then
+
+    end
+end

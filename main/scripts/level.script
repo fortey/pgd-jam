@@ -1,0 +1,44 @@
+local s = require("main/scripts/settings")
+local utils = require("main/scripts/utils")
+
+function init(self)
+
+	local levelx, levely, w, h = tilemap.get_bounds("/tilemap#level1")
+	local tile, coord_x, coord_y = 0
+	local pos = vmath.vector3() print(w .. " - " .. h)
+	for ly = 0, h - 1 do
+		for lx = 0, w - 1 do
+			tile = tilemap.get_tile("/tilemap#level1", hash("ground"), lx + 1, ly + 1)
+			print(lx .. " - " .. ly)
+			s.world[ly * w + lx + 1] = tile -- World table for path
+
+			if tile == 10 then --Ground tile ID
+				coord_x, coord_y = utils:coords_to_screen(lx, ly)
+				pos = vmath.vector3(coord_x, coord_y, 0.3)
+				table.insert(s.tiles, {x = lx, y = ly, position = pos}) -- Tile position table
+			end
+		end
+	end
+
+	s.tiles_count = #s.tiles -- Total tiles
+
+	s.mapWidth = w
+	s.mapHeight = h
+	s.allocate = w * h
+	local costs = {
+		[10] = {
+			1.0,
+			1.0,
+			1.0,
+			1.0,
+			1.41,
+			1.41,
+			1.41,
+			1.41
+		}
+	}
+
+	astar.setup(s.mapWidth, s.mapHeight, s.direction, s.allocate, s.typical_adjacent, s.cache)
+	astar.set_map(s.world)
+	astar.set_costs(costs)
+end
