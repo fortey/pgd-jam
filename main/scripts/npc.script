@@ -6,6 +6,7 @@ local s = require("main/scripts/settings")
 
 local start_id = 1
 local get_path
+local COLLISION_RESPONSE = hash("collision_response")
 
 local function reset(self)
     self.is_moving = false
@@ -58,7 +59,7 @@ end
 
 get_path = function(self, near_tile)
     --near_tile = near_tile or false
-
+    reset(self)
     --if near_tile == false then
     --self.target = s.targets[rnd.range(1, s.target_count)]
     --end
@@ -67,15 +68,16 @@ get_path = function(self, near_tile)
     self.target = {x = coord_x, y = coord_y}
     self.result, self.path_size, self.totalcost, self.path =
     astar.solve(self.tile_x, self.tile_y, self.target.x, self.target.y)
-
+    
     if self.result == astar.SOLVED then
         --if self.type == 1 then
 
         --end
 
-        move(self)
+        --move(self)
     elseif self.result == astar.NO_SOLUTION then
         print("NO_SOLUTION")
+        print(coord_x..coord_y)
 
 
     elseif self.result == astar.START_END_SAME then
@@ -85,14 +87,18 @@ end
 
 
 function init(self)
-    reset(self)
+    --reset(self)
 
-        get_path(self)
+        --get_path(self)
 
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == hash("update_costs") then
-
+    if message_id == COLLISION_RESPONSE and message.other_group == hash("wall") then
+        reset(self)
+        get_path(self)
+        if self.result == astar.SOLVED then
+            print(self.path_size)
+        end 
     end
 end

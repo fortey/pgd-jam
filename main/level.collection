@@ -164,6 +164,7 @@ embedded_instances {
   "group: \\\"wall\\\"\\n"
   "mask: \\\"bullets\\\"\\n"
   "mask: \\\"player\\\"\\n"
+  "mask: \\\"enemy\\\"\\n"
   "linear_damping: 0.0\\n"
   "angular_damping: 0.0\\n"
   "locked_rotation: false\\n"

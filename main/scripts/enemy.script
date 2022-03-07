@@ -23,11 +23,11 @@ function update(self, dt)
 
 		-- rotate towards target
 		local q = vmath.slerp(0.08, current_quat, target_quat)
-		--go.set_rotation(q)
+		go.set_rotation(q)
 
 		-- move towards target
 		local d = vmath.rotate(q, vmath.vector3(0, 1, 0))
-		--go.set_position(pos + d * self.speed * dt)
+		go.set_position(pos + d * self.speed * dt)
 
 		if self.attack_cooldown > 0 then
 			self.attack_cooldown = self.attack_cooldown - dt
