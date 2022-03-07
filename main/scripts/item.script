@@ -1,0 +1,9 @@
+go.property("name", hash("-"))
+go.property("amount", 5)
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		msg.post(message.other_id, "take_item", {item = self.name, amount = self.amount})
+		go.delete()
+	end
+end

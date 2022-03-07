@@ -101,7 +101,9 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == CHANGE_WEAPON_ID then
 		change_weapon(self, message.weapon)
-	elseif message_id == hash("set_update_reload") then
-		self.update_reload = message.callback
+	elseif message_id == hash("take_gun") then
+		if message.item == "hp" then
+
+		end	
 	end
 end

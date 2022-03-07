@@ -105,7 +105,7 @@ instances {
     id: "spawner"
     properties {
       id: "max_count"
-      value: "0.0"
+      value: "1.0"
       type: PROPERTY_TYPE_NUMBER
     }
   }
@@ -116,11 +116,11 @@ instances {
   }
 }
 instances {
-  id: "spider"
-  prototype: "/main/spider.go"
+  id: "item_hp"
+  prototype: "/main/item_hp.go"
   position {
-    x: 666.0
-    y: 316.0
+    x: 1003.0
+    y: 622.0
     z: 0.0
   }
   rotation {

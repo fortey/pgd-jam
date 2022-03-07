@@ -12,5 +12,10 @@ function on_message(self, message_id, message, sender)
 	if message_id == HIT and self.hp>0 then	
 		self.hp = self.hp - message.damage
 		msg.post("/gui#level", "update_hp", { hp = self.hp, max_hp = self.max_hp})
+	elseif message_id == hash("take_item") then
+		if message.item == hash("hp") then
+			self.hp = math.min(self.hp + message.amount, self.max_hp)
+			msg.post("/gui#level", "update_hp", { hp = self.hp, max_hp = self.max_hp})
+		end	
 	end
 end
