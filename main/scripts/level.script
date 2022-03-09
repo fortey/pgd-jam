@@ -1,15 +1,19 @@
 local s = require("main/scripts/settings")
 local utils = require("main/scripts/utils")
+local camera = require "orthographic.camera"
+local CAMERA_ID = hash("/camera")
 
 function init(self)
 
 	local levelx, levely, w, h = tilemap.get_bounds("/tilemap#level1")
+	
+	camera.bounds(CAMERA_ID, 0, h*s.tile_size*2, w*s.tile_size*2, 0)
+	
 	local tile, coord_x, coord_y = 0
 	local pos = vmath.vector3() print(w .. " - " .. h)
 	for ly = 0, h - 1 do
 		for lx = 0, w - 1 do
 			tile = tilemap.get_tile("/tilemap#level1", hash("ground"), lx + 1, ly + 1)
-			print(lx .. " - " .. ly)
 			s.world[ly * w + lx + 1] = tile -- World table for path
 
 			if tile == 10 then --Ground tile ID
@@ -38,7 +42,7 @@ function init(self)
 		}
 	}
 
-	astar.setup(s.mapWidth, s.mapHeight, s.direction, s.allocate, s.typical_adjacent, s.cache)
-	astar.set_map(s.world)
-	astar.set_costs(costs)
+	--astar.setup(s.mapWidth, s.mapHeight, s.direction, s.allocate, s.typical_adjacent, s.cache)
+	--astar.set_map(s.world)
+	--astar.set_costs(costs)
 end

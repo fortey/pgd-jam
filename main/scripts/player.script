@@ -18,7 +18,7 @@ function on_message(self, message_id, message, sender)
 			self.hp = math.min(self.hp + message.amount, self.max_hp)
 			msg.post("/gui#level", "update_hp", { hp = self.hp, max_hp = self.max_hp})
 		elseif message.item == hash("gun") or message.item == hash("shotgun") then
-			msg.post(".", "take_ammo", { weapon = message.item, amount = message.amount})	
+			msg.post("#shooter", "take_ammo", { weapon = message.item, amount = message.amount})	
 		end	
 	end
 end
