@@ -5,6 +5,7 @@ local camera = require "orthographic.camera"
 local CAMERA_ID = hash("/camera")
 local weapons = require "main.scripts.weapons"
 local CHANGE_WEAPON_ID = hash("change_weapon")
+local TAKE_AMMO = hash("take_ammo")
 
 local function change_weapon(self, weapon)
 	self.weapon = weapons[weapon]
@@ -101,9 +102,14 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == CHANGE_WEAPON_ID then
 		change_weapon(self, message.weapon)
-	elseif message_id == hash("take_gun") then
-		if message.item == "hp" then
-
-		end	
+	elseif message_id == TAKE_AMMO then
+		local weapon-- = nil
+		if message.weapon == hash("gun") then
+			weapon = weapons["gun"]
+		else
+			weapon = weapons["shotgun"]
+		end
+		weapon.ammunition = weapon.ammunition + message.amount
+		update_weapon_info(weapon)
 	end
 end

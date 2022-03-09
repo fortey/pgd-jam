@@ -135,6 +135,46 @@ instances {
     z: 1.0
   }
 }
+instances {
+  id: "item_bullets"
+  prototype: "/main/item_bullets.go"
+  position {
+    x: 864.0
+    y: 298.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "item_s-bullets"
+  prototype: "/main/item_s-bullets.go"
+  position {
+    x: 1251.0
+    y: 255.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "tilemap"
