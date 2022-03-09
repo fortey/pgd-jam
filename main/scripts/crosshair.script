@@ -9,7 +9,7 @@ end
 
 function update(self, dt)
 	local cursor_pos = camera.screen_to_world(CAMERA_ID, self.crosshair)
-	cursor_pos = vmath.lerp(0.5, go.get_position(), cursor_pos)
+	--cursor_pos = vmath.lerp(0.5, go.get_position(), cursor_pos)
 	go.set_position(cursor_pos)
 	--label.set_text("#position", ("%.2f x %.2f"):format(cursor_pos.x, cursor_pos.y))
 end

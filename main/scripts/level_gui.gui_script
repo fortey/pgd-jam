@@ -14,7 +14,10 @@ local function create_blue_button(node, spite, callback)
 end
 
 function init(self)
+	self.crosshair = vmath.vector3()
+	self.show_reload = false
 	msg.post(".", "acquire_input_focus")
+	
 	self.gun = create_blue_button(gui.get_node("gun"), hash("char_gun"), function()
 		msg.post("/player", "change_weapon", {weapon = "gun"})
 	end)
@@ -25,9 +28,12 @@ function init(self)
 
 	self.hp_node = gui.get_node("hp")
 	self.reload_node = gui.get_node("reload")
+	self.crosshair_node = gui.get_node("crosshair")
 end
 
 function on_input(self, action_id, action)
+	self.crosshair.x = action.x
+	self.crosshair.y = action.y
 	if self.gun.on_input(action_id, action) then
 		return true
 	end
@@ -51,18 +57,27 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == UPDATE_RELOAD then 
 		local ofset = vmath.vector3(25,25,0)
 		if message.position then
-			gui.set_position(self.reload_node, camera.world_to_screen(nil, message.position, nil)+ofset)
+			--gui.set_position(self.reload_node, camera.world_to_screen(nil, message.position, nil)+ofset)
 			local value = (message.all_time - message.cooldown)/message.all_time*360
 			gui.set_fill_angle(self.reload_node, value)
 		end
 	elseif message_id == SHOW_RELOAD then
 		gui.set_alpha(self.reload_node, 1)
+		self.show_reload = true
 	elseif message_id == HIDE_RELOAD then
 		gui.set_alpha(self.reload_node, 0)
+		self.show_reload = false
 	elseif message_id == UPDATE_AMMO then 
 		local y = message.catridges/message.clip_capacity * 30 - 30
 		gui.set_position(gui.get_node(message.name.."_progress"), vmath.vector3(0,y,0))
 		gui.set_text(gui.get_node(message.name.."_catridges"), message.catridges.."/"..message.clip_capacity)
 		gui.set_text(gui.get_node(message.name.."_ammunition"), message.ammunition)
 	end
+end
+
+function update(self, dt)
+	if self.show_reload then
+		gui.set_position(self.reload_node, self.crosshair)
+	end
+	gui.set_position(self.crosshair_node, self.crosshair)
 end
