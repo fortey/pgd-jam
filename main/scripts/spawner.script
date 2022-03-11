@@ -2,9 +2,10 @@ go.property('max_count', 20)
 go.property('cooldown', 0.3)
 go.property('scatter', 150)
 
-local scale1 = vmath.vector3(2, 2, 1)
+local TRIGGER_RESPONSE = hash("trigger_response")
 
 function init(self)
+	self.is_active = false
 	self.time_left = 0
 	self.count = 0
 end
@@ -17,10 +18,17 @@ local function spawn(self)
 end
 
 function update(self, dt)
-	if self.count < self.max_count then
+	if self.is_active and self.count < self.max_count then
 		self.time_left = self.time_left + dt
 		if self.time_left> self.cooldown then
 			spawn(self)
 		end
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == TRIGGER_RESPONSE then
+		self.is_active = true
+		msg.post('#collisionobject', 'disable')
 	end
 end

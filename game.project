@@ -12,14 +12,17 @@ game_binding = /input/game.input_bindingc
 use_accelerometer = 0
 
 [display]
-width = 1280
-height = 720
+width = 1600
+height = 900
+vsync = 1
+fullscreen = 0
+high_dpi = 0
 
 [script]
 shared_state = 1
 
 [windows]
-app_icon = /assets/app_icons/appicon.ico
+app_icon = /assets/images/spider.ico
 
 [osx]
 app_icon = /assets/app_icons/appicon.icns
@@ -34,8 +37,12 @@ scale = 0.01
 [html5]
 cssfile = /builtins/manifests/web/dark_theme.css
 show_made_with_defold = 0
+scale_mode = fit
 
 [graphics]
 default_texture_min_filter = nearest
 default_texture_mag_filter = nearest
+
+[tilemap]
+max_tile_count = 204800
 

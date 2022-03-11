@@ -1,0 +1,11 @@
+local TRIGGER_RESPONSE = hash("trigger_response")
+
+function on_message(self, message_id, message, sender)
+	if message_id == TRIGGER_RESPONSE then
+		msg.post("#spawner", "start")
+		msg.post('#collisionobject', 'disable')
+	end
+end
+
+
+

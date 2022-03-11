@@ -75,6 +75,7 @@ embedded_components {
   "mask: \"wall\"\n"
   "mask: \"enemy\"\n"
   "mask: \"item\"\n"
+  "mask: \"trigger\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"
