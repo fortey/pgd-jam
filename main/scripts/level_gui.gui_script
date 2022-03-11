@@ -18,11 +18,11 @@ function init(self)
 	self.show_reload = false
 	msg.post(".", "acquire_input_focus")
 	
-	self.gun = create_blue_button(gui.get_node("gun"), hash("char_gun"), function()
+	self.gun = create_blue_button(gui.get_node("gun"), hash("gun_ico"), function()
 		msg.post("/player", "change_weapon", {weapon = "gun"})
 	end)
 
-	self.shotgun = create_blue_button(gui.get_node("shotgun"), hash("char_shotgun"), function()
+	self.shotgun = create_blue_button(gui.get_node("shotgun"), hash("shotgun_ico"), function()
 		msg.post("/player", "change_weapon", {weapon = "shotgun"})
 	end)
 

@@ -11,8 +11,9 @@ M["gun"] = {
 	ammunition  = 100,
 	clip_capacity = 12,
 	catridges = 12,
-	reload_time = 1,
+	reload_time = 1.8,
 	show_reload_between_attack = false,
+	reload_sound = "#gun_reload",
 	shoot = function(self, go)
 		local crosshair_world = go.get_position("crosshair")
 		local player_world = go.get_position()
@@ -30,12 +31,13 @@ M["shotgun"] = {
 	name = "shotgun",
 	sprite = hash("char_shotgun"),
 	fire_anim = hash("char_shotgun_fire"),
-	time_between_atack = 0.5,
-	ammunition  = 100,
+	time_between_atack = 0.9,
+	ammunition  = 6,
 	clip_capacity = 6,
 	catridges = 6,
-	reload_time = 1,
+	reload_time = 2.5,
 	show_reload_between_attack = true,
+	reload_sound = "#shotgun_reload",
 	shoot = function(self, go)
 		local crosshair_world = go.get_position("crosshair")
 		local player_world = go.get_position()
@@ -49,7 +51,7 @@ M["shotgun"] = {
 			factory.create("#shoot_factory", player_world + offset, rotation*vmath.quat_rotation_z(i*rotate_step), {speed = math.random(800, 1300), lifetime = 0.4})
 		end
 
-		sound.play("#shoot")
+		sound.play("#shoot_shotgun")
 		camera.recoil(CAMERA_ID, offset, 0.08)
 	end
 }
