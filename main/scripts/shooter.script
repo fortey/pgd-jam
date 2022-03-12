@@ -6,6 +6,7 @@ local CAMERA_ID = hash("/camera")
 local weapons = require "main.scripts.weapons"
 local CHANGE_WEAPON_ID = hash("change_weapon")
 local TAKE_AMMO = hash("take_ammo")
+local CHANGE_WEAPON_TIME = 0.6
 
 local function stop_reload(self)
 	self.reload_cooldown = 0
@@ -17,11 +18,12 @@ local function change_weapon(self, weapon)
 	if self.weapon ~= weapons[weapon] then
 		if self.weapon ~= nil then
 			stop_reload(self)
+			sound.play("#change_weapon")
 		end
 		
 		self.weapon = weapons[weapon]
 		self.fire_anim = self.weapon.fire_anim
-		self.attack_cooldown = self.weapon.time_between_atack
+		self.attack_cooldown = CHANGE_WEAPON_TIME
 		
 		msg.post("#sprite", "play_animation", {id = self.weapon.sprite})
 	end
@@ -109,7 +111,7 @@ function update(self, dt)
 			end
 		elseif self.attack_cooldown > 0 then
 			self.attack_cooldown = self.attack_cooldown - dt
-			if self.attack_cooldown > 0 then 
+			if self.attack_cooldown > 0 and self.weapon.show_reload_between_attack then 
 				msg.post("/gui#level", "update_reload", { position = crosshair_world, cooldown = self.attack_cooldown, all_time = self.weapon.time_between_atack})
 			else
 				msg.post("/gui#level", "hide_reload")

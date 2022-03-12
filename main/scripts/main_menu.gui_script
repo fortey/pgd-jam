@@ -1,0 +1,20 @@
+local button = require "main.scripts.button"
+
+function init(self)
+
+	msg.post(".", "acquire_input_focus")
+	self.start = button.create(gui.get_node("start"), "button_pressed", "button_released", function()
+		msg.post("/main_menu", "start")
+		msg.post(".", "disable")
+		gui.set_text(gui.get_node("text"), "restart")
+	end)
+
+end	
+
+function on_input(self, action_id, action)
+
+	if self.start.on_input(action_id, action) then
+		return true
+	end
+
+end

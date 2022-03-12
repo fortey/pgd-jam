@@ -42,11 +42,14 @@ function on_message(self, message_id, message)
 			msg.post('#sprite', 'play_animation', {id = hash('spider_dead')})
 			msg.post('#collisionobject', 'disable')
 			self.is_alive = false
+			sound.play("#die")
+			timer.delay(10, false, function(self, handle, time_elapsed) go.delete() end)
 			--go.delete()
 		end
 	elseif message_id == COLLISION_RESPONSE and message.other_group == PLAYER then
 		if self.attack_cooldown <= 0 then	
 			msg.post(message.other_id, 'hit', {damage = 5})
+			sound.play("#bite")
 			self.attack_cooldown = self.time_between_atack
 		end
 	end

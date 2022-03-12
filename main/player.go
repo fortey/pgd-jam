@@ -248,7 +248,53 @@ embedded_components {
   data: "sound: \"/assets/audio/missfire.wav\"\n"
   "looping: 0\n"
   "group: \"master\"\n"
-  "gain: 1.0\n"
+  "gain: 2.0\n"
+  "pan: 0.0\n"
+  "speed: 1.0\n"
+  "loopcount: 0\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "take"
+  type: "sound"
+  data: "sound: \"/assets/audio/take.wav\"\n"
+  "looping: 0\n"
+  "group: \"master\"\n"
+  "gain: 2.0\n"
+  "pan: 0.0\n"
+  "speed: 1.0\n"
+  "loopcount: 0\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "change_weapon"
+  type: "sound"
+  data: "sound: \"/assets/audio/change_weapon.wav\"\n"
+  "looping: 0\n"
+  "group: \"master\"\n"
+  "gain: 0.7\n"
   "pan: 0.0\n"
   "speed: 1.0\n"
   "loopcount: 0\n"

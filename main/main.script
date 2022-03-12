@@ -1,24 +1,60 @@
+local KEY_MENU = hash("menu")
+
+local function start(self)
+	msg.post("/loader#proxy_level", "load")
+	msg.post("/loader", "acquire_input_focus")
+	self.started = true
+end
+
 function init(self)
 	math.randomseed(os.time())
 	msg.post(".", "acquire_input_focus")
 	msg.post("@render:", "use_fixed_fit_projection", { near = -1, far = 1 })
-
-	msg.post("/loader#proxy_level", "load")
-	msg.post("/loader", "acquire_input_focus")
-
+	self.open = true
+	self.started = false
+	self.game_over = false
+	sound.play("#sound")
 	--msg.post(".", "release_input_focus")
-	msg.post(".", "disable")
+	--msg.post(".", "disable")
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("touch") and action.pressed then
+	if action_id == KEY_MENU and action.released and self.started and not self.game_over then
 		
+		if self.open then
+			msg.post("/main_menu#main_menu", "disable")
+			msg.post("/loader#proxy_level", "set_time_step", {factor = 1, mode = 1})
+			msg.post("/loader", "acquire_input_focus")
+		else
+			msg.post("/main_menu#main_menu", "enable")
+			msg.post("/loader#proxy_level", "set_time_step", {factor = 0, mode = 0})
+			msg.post("/loader", "release_input_focus")	
+		end
+		self.open = not self.open	
 	end
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("proxy_loaded") then
+	if message_id == hash("start") then
+
+		if self.started then
+			msg.post("@system:", "reboot")
+		else	
+			start(self)
+			self.open = false
+		end
+			
+	elseif message_id == hash("proxy_loaded") then
+			
 		msg.post(sender, "init")
 		msg.post(sender, "enable")
+
+	elseif message_id == hash("game_over") then
+
+		self.game_over = true
+		msg.post("/main_menu#main_menu", "enable")
+		msg.post("/loader#proxy_level", "set_time_step", {factor = 0, mode = 0})
+		msg.post("/loader", "release_input_focus")
+		
 	end
 end
