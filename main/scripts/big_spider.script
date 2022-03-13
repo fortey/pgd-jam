@@ -8,6 +8,8 @@ local HIT_ID = hash("hit")
 local COLLISION_RESPONSE = hash("collision_response")
 local PLAYER = hash("player")
 
+local spawn_scale = vmath.vector3(1,1,1)
+
 function init(self)
 	self.target_id = nil
 	self.is_alive = true
@@ -17,7 +19,7 @@ function init(self)
 end
 
 local function spawn(position, angle_z)
-	factory.create("#factory", position, vmath.quat_rotation_z(angle_z))
+	factory.create("#factory", position, vmath.quat_rotation_z(angle_z), nil, spawn_scale)
 end
 
 local function end_spawning(self, handle, time_elapsed)

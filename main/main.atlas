@@ -59,10 +59,6 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/assets/images/light_mask.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
-images {
   image: "/assets/images/gun_ico.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }

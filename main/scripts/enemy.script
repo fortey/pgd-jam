@@ -10,6 +10,7 @@ function init(self)
 	self.target_id = nil
 	self.is_alive = true
 	self.attack_cooldown = 0
+	self.life_time = 0
 	--self.target_position = random_position_on_wall()
 end
 
@@ -32,6 +33,11 @@ function update(self, dt)
 		if self.attack_cooldown > 0 then
 			self.attack_cooldown = self.attack_cooldown - dt
 		end
+
+		self.life_time = self.life_time + dt
+		if self.life_time > 50 and vmath.length(self.target_position - pos) > 1700 then
+			go.delete()
+		end	
 	end
 end
 

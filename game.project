@@ -1,5 +1,6 @@
 [project]
-title = pgd
+title = Food Escape
+developer = fortey
 dependencies#0 = https://github.com/britzl/defold-orthographic/archive/master.zip
 
 [bootstrap]
@@ -11,8 +12,8 @@ game_binding = /input/game.input_bindingc
 use_accelerometer = 0
 
 [display]
-width = 1600
-height = 900
+width = 1280
+height = 720
 vsync = 1
 fullscreen = 0
 high_dpi = 0
@@ -32,11 +33,12 @@ input_method = HiddenInputField
 [physics]
 gravity_y = 0.0
 scale = 0.01
+max_collisions = 128
 
 [html5]
 cssfile = /builtins/manifests/web/dark_theme.css
 show_made_with_defold = 0
-scale_mode = fit
+scale_mode = downscale_fit
 
 [graphics]
 default_texture_min_filter = nearest
