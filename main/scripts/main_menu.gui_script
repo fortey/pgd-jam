@@ -7,6 +7,7 @@ function init(self)
 		msg.post("/main_menu", "start")
 		msg.post(".", "disable")
 		gui.set_text(gui.get_node("text"), "restart")
+		gui.set_alpha(gui.get_node("bg"), 0)
 	end)
 
 end	
