@@ -272,7 +272,7 @@ embedded_components {
   data: "sound: \"/assets/audio/take.wav\"\n"
   "looping: 0\n"
   "group: \"master\"\n"
-  "gain: 2.0\n"
+  "gain: 4.0\n"
   "pan: 0.0\n"
   "speed: 1.0\n"
   "loopcount: 0\n"
