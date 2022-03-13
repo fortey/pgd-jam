@@ -55,6 +55,14 @@ function on_message(self, message_id, message, sender)
 		msg.post("/main_menu#main_menu", "enable")
 		msg.post("/loader#proxy_level", "set_time_step", {factor = 0, mode = 0})
 		msg.post("/loader", "release_input_focus")
+
+	elseif message_id == hash("the_end") then
+
+		self.game_over = true
+		msg.post("/main_menu#main_menu", "enable")
+		msg.post("/main_menu#main_menu", "show_the_end")
+		msg.post("/loader#proxy_level", "set_time_step", {factor = 0, mode = 0})
+		msg.post("/loader", "release_input_focus")
 		
 	end
 end

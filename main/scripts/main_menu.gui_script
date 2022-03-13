@@ -18,3 +18,10 @@ function on_input(self, action_id, action)
 	end
 
 end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("show_the_end") then
+		gui.set_alpha(gui.get_node("the_end"), 1)
+		gui.set_alpha(gui.get_node("the_end_text"), 1)
+	end
+end	

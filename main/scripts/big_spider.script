@@ -14,7 +14,6 @@ function init(self)
 	self.attack_cooldown = 0
 	self.spawn_cooldown = 0
 	self.spawning = false
-	--self.target_position = random_position_on_wall()
 end
 
 local function spawn(position, angle_z)
@@ -22,17 +21,21 @@ local function spawn(position, angle_z)
 end
 
 local function end_spawning(self, handle, time_elapsed)
-	self.spawning = false
-	msg.post('#sprite', 'play_animation', {id = hash('big_spider_walk')})
+	if self.is_alive then
+		self.spawning = false
+		msg.post('#sprite', 'play_animation', {id = hash('big_spider_walk')})
+	end
 end
 
 local function spawning(self, handle, time_elapsed)
-	local pos = go.get_world_position()
-	for i = 0, 6 do
-		spawn(pos, i*60)
-	end
+	if self.is_alive then
+		local pos = go.get_world_position()
+		for i = 0, 6 do
+			spawn(pos, i*60)
+		end
 
-	timer.delay(0.5, false, end_spawning)
+		timer.delay(0.5, false, end_spawning)
+	end
 end
 
 function update(self, dt)
@@ -57,7 +60,7 @@ function update(self, dt)
 		if vmath.length(pos - self.target_position) < self.distance_to_spawn and self.spawn_cooldown <= 0 then
 			msg.post('#sprite', 'play_animation', {id = hash('big_spider_spawn')})
 			self.spawning = true
-			timer.delay(0.5, false, spawning)
+			timer.delay(0.8, false, spawning)
 
 			self.spawn_cooldown = self.time_between_spawn
 		end
@@ -84,7 +87,7 @@ function on_message(self, message_id, message)
 			--go.delete()
 		end
 	elseif message_id == COLLISION_RESPONSE and message.other_group == PLAYER then
-		if self.attack_cooldown <= 0 then	
+		if self.is_alive and self.attack_cooldown <= 0 then	
 			msg.post(message.other_id, 'hit', {damage = 5})
 			sound.play("#bite")
 			self.attack_cooldown = self.time_between_atack

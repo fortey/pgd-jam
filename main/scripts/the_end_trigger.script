@@ -1,0 +1,9 @@
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		msg.post("main:/main_menu", "the_end")
+	end
+end
+
+
+
