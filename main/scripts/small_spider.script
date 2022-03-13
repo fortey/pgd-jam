@@ -1,36 +1,50 @@
 go.property("hp", 10)
 go.property("speed", 100)
 go.property("time_between_atack", 1)
+--go.property("angle_z", vmath.vector3(0, 0, 0))
 
 local HIT_ID = hash("hit")
 local COLLISION_RESPONSE = hash("collision_response")
 local PLAYER = hash("player")
 
+local time_to_move_player = 1
+
 function init(self)
 	self.target_id = nil
 	self.is_alive = true
 	self.attack_cooldown = 0
+	self.time_to_move_player = time_to_move_player
+	--go.set_rotation(vmath.quat_rotation_z(angle_z))
 	--self.target_position = random_position_on_wall()
 end
 
 function update(self, dt)
 	if self.is_alive then
-		local pos = go.get_world_position()
-		self.target_position = go.get_world_position('player')
-		local target_angle = -math.atan2(self.target_position.x - pos.x, self.target_position.y - pos.y)
-		local target_quat = vmath.quat_rotation_z(target_angle)
-		local current_quat = go.get_rotation()
 
-		-- rotate towards target
-		local q = vmath.slerp(0.08, current_quat, target_quat)
-		go.set_rotation(q)
+		if self.time_to_move_player > 0 then 
+			self.time_to_move_player = self.time_to_move_player - dt
 
-		-- move towards target
-		local d = vmath.rotate(q, vmath.vector3(0, 1, 0))
-		go.set_position(pos + d * self.speed * dt)
+			local rotation = go.get_rotation()
+			local d = vmath.rotate(rotation, vmath.vector3(0, 1, 0))
+			go.set_position(go.get_position() + d * self.speed * dt)
+		else
+			local pos = go.get_world_position()
+			self.target_position = go.get_world_position('player')
+			local target_angle = -math.atan2(self.target_position.x - pos.x, self.target_position.y - pos.y)
+			local target_quat = vmath.quat_rotation_z(target_angle)
+			local current_quat = go.get_rotation()
 
-		if self.attack_cooldown > 0 then
-			self.attack_cooldown = self.attack_cooldown - dt
+			-- rotate towards target
+			local q = vmath.slerp(0.08, current_quat, target_quat)
+			go.set_rotation(q)
+
+			-- move towards target
+			local d = vmath.rotate(q, vmath.vector3(0, 1, 0))
+			go.set_position(pos + d * self.speed * dt)
+
+			if self.attack_cooldown > 0 then
+				self.attack_cooldown = self.attack_cooldown - dt
+			end
 		end
 	end
 end

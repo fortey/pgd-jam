@@ -34,7 +34,7 @@ embedded_components {
   position {
     x: 0.0
     y: 0.0
-    z: 0.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -48,7 +48,7 @@ embedded_components {
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_DYNAMIC\n"
-  "mass: 1.0\n"
+  "mass: 5.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
   "group: \"enemy\"\n"
@@ -125,6 +125,24 @@ embedded_components {
   "pan: 0.0\n"
   "speed: 1.0\n"
   "loopcount: 0\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "factory"
+  type: "factory"
+  data: "prototype: \"/main/small_spider.go\"\n"
+  "load_dynamically: false\n"
   ""
   position {
     x: 0.0

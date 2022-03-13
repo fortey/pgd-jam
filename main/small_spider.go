@@ -1,6 +1,6 @@
 components {
   id: "enemy"
-  component: "/main/scripts/enemy.script"
+  component: "/main/scripts/small_spider.script"
   position {
     x: 0.0
     y: 0.0
@@ -14,7 +14,7 @@ components {
   }
   properties {
     id: "hp"
-    value: "15.0"
+    value: "5.0"
     type: PROPERTY_TYPE_NUMBER
   }
 }
@@ -46,11 +46,12 @@ embedded_components {
   "mass: 1.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"enemy\"\n"
+  "group: \"small_enemy\"\n"
   "mask: \"bullets\"\n"
   "mask: \"player\"\n"
   "mask: \"wall\"\n"
   "mask: \"enemy\"\n"
+  "mask: \"small_enemy\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"
