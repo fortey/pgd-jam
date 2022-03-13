@@ -197,14 +197,14 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "shotgun_reload"
+  id: "shotgun_reload_one"
   type: "sound"
-  data: "sound: \"/assets/audio/shotgun-reload.wav\"\n"
+  data: "sound: \"/assets/audio/shotgun-reload_one.wav\"\n"
   "looping: 0\n"
   "group: \"master\"\n"
   "gain: 1.0\n"
   "pan: 0.0\n"
-  "speed: 1.5\n"
+  "speed: 1.0\n"
   "loopcount: 0\n"
   ""
   position {
@@ -295,6 +295,52 @@ embedded_components {
   "looping: 0\n"
   "group: \"master\"\n"
   "gain: 0.7\n"
+  "pan: 0.0\n"
+  "speed: 1.0\n"
+  "loopcount: 0\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "shotgun_reload_start"
+  type: "sound"
+  data: "sound: \"/assets/audio/shotgun-reload_start.wav\"\n"
+  "looping: 0\n"
+  "group: \"master\"\n"
+  "gain: 1.0\n"
+  "pan: 0.0\n"
+  "speed: 1.0\n"
+  "loopcount: 0\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "shotgun_reload_end"
+  type: "sound"
+  data: "sound: \"/assets/audio/shotgun-reload_end.wav\"\n"
+  "looping: 0\n"
+  "group: \"master\"\n"
+  "gain: 1.0\n"
   "pan: 0.0\n"
   "speed: 1.0\n"
   "loopcount: 0\n"

@@ -8,6 +8,8 @@ local CHANGE_WEAPON_ID = hash("change_weapon")
 local TAKE_AMMO = hash("take_ammo")
 local CHANGE_WEAPON_TIME = 0.6
 
+local shotgun_sounds = {times = {start = 0.42, one = 0.415, _end = 0.57}, sounds = {start = "#shotgun_reload_start", one = "#shotgun_reload_one", _end = "#shotgun_reload_end"}}
+
 local function stop_reload(self)
 	self.reload_cooldown = 0
 	msg.post("/gui#level", "hide_reload")
@@ -17,7 +19,7 @@ end
 local function change_weapon(self, weapon)
 	if self.weapon ~= weapons[weapon] then
 		if self.weapon ~= nil then
-			stop_reload(self)
+			--stop_reload(self)
 			sound.play("#change_weapon")
 		end
 		
@@ -50,21 +52,60 @@ local function shoot(self)
 	update_weapon_info(self.weapon)
 end
 
-local function start_reload(self)
-	if self.weapon.ammunition >0 then
-		self.reload_cooldown = self.weapon.reload_time
-		msg.post("/gui#level", "show_reload")
-		sound.play(self.weapon.reload_sound)
+local function play_reload_end(self, message_id, message, sender)
+	msg.post("/gui#level", "hide_reload")
+	self.attack_cooldown = 0
+end
+
+local function play_reload_one_end(self, message_id, message, sender)
+
+	self.weapon.catridges = self.weapon.catridges + 1
+	self.weapon.ammunition = self.weapon.ammunition - 1
+	self.weapon.current_reload = self.weapon.current_reload + 1
+
+	update_weapon_info(self.weapon)
+
+	if self.weapon.current_reload < self.weapon.max_reload then
+		sound.play(shotgun_sounds.sounds.one, nil, play_reload_one_end)
+	else
+		sound.play(shotgun_sounds.sounds._end, nil, play_reload_end)
 	end
 end
 
-local function reload(self, weapon)
-	local amount = math.min(weapon.clip_capacity - weapon.catridges, weapon.ammunition)
-	weapon.catridges = weapon.catridges + amount
-	weapon.ammunition = weapon.ammunition - amount
+local function play_reload_start_end(self, message_id, message, sender)
+	sound.play(shotgun_sounds.sounds.one, nil, play_reload_one_end)
+end
+
+local function start_reload_shotgun(self)
+	local amount = math.min(self.weapon.clip_capacity - self.weapon.catridges, self.weapon.ammunition)
+	self.reload_time = shotgun_sounds.times.start + shotgun_sounds.times._end + shotgun_sounds.times.one*amount
+	self.reload_cooldown = self.reload_time
+	
+	self.weapon.current_reload = 0
+	self.weapon.max_reload = amount
+	sound.play(shotgun_sounds.sounds.start, nil, play_reload_start_end)
+end
+
+local function gun_reload_end(self, message_id, message, sender)
+	local amount = math.min(self.weapon.clip_capacity - self.weapon.catridges, self.weapon.ammunition)
+	self.weapon.catridges = self.weapon.catridges + amount
+	self.weapon.ammunition = self.weapon.ammunition - amount
 	msg.post("/gui#level", "hide_reload")
 	self.attack_cooldown = 0
 	update_weapon_info(self.weapon)
+end
+
+local function start_reload(self)
+	if self.weapon.ammunition >0 then
+		if self.weapon.name == "shotgun" then
+			start_reload_shotgun(self)
+		else
+			self.reload_cooldown = self.weapon.reload_time
+			self.reload_time = self.weapon.reload_time
+			sound.play(self.weapon.reload_sound, nil, gun_reload_end)
+		end
+		msg.post("/gui#level", "show_reload")
+	end
 end
 
 function on_input(self, action_id, action)
@@ -87,7 +128,7 @@ function on_input(self, action_id, action)
 					sound.play("#missfire")
 				end
 			end
-		elseif action_id == hash("reload") and action.released  and self.reload_cooldown <= 0 then
+		elseif action_id == hash("reload") and action.released  and self.reload_cooldown <= 0 and self.weapon.catridges ~= self.weapon.clip_capacity then
 			start_reload(self)
 		end
 	end
@@ -105,9 +146,9 @@ function update(self, dt)
 		if self.reload_cooldown > 0 then
 			self.reload_cooldown = self.reload_cooldown - dt
 			if self.reload_cooldown > 0 then 
-				msg.post("/gui#level", "update_reload", { position = crosshair_world, cooldown = self.reload_cooldown, all_time = self.weapon.reload_time})
+				msg.post("/gui#level", "update_reload", { position = crosshair_world, cooldown = self.reload_cooldown, all_time = self.reload_time})
 			else
-				reload(self, self.weapon)
+				--reload(self, self.weapon)
 			end
 		elseif self.attack_cooldown > 0 then
 			self.attack_cooldown = self.attack_cooldown - dt
@@ -121,7 +162,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == CHANGE_WEAPON_ID then
+	if message_id == CHANGE_WEAPON_ID and self.reload_cooldown <= 0 then
 		change_weapon(self, message.weapon)
 	elseif message_id == TAKE_AMMO then
 		local weapon-- = nil
